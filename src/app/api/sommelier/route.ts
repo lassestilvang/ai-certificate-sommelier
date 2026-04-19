@@ -8,7 +8,8 @@ export const maxDuration = 60; // 60 seconds max
 
 // ElevenLabs Voice ID for "Deep Male Wine Connoisseur" (George - snobby british / deep)
 // Alternatively, "pNInz6obpgDQGcFmaJgB" for Adam
-const VOICE_ID = "pNInz6obpgDQGcFmaJgB";
+// const VOICE_ID = "pNInz6obpgDQGcFmaJgB";
+const VOICE_ID = "zwqMXWHsKBMIb9RPiWI0";
 
 async function getCertificate(domain: string): Promise<any> {
   return new Promise((resolve, reject) => {
@@ -83,10 +84,10 @@ Expires in: ${daysUntilExpiry} days
     // Useless Metrics
     const firstHexBits = parseInt(cert.fingerprint256?.substring(0, 2) || "50", 16);
     const vintageScore = 70 + (firstHexBits % 30); // Random score between 70-99
-    
+
     // Grab first 6 non-colon characters for a valid hex color
     const colorHex = "#" + (cert.fingerprint256?.replace(/:/g, "").substring(0, 6) || "721c24");
-    
+
     // Arbitrary string length check for "Legs"
     const legs = (cert.raw.length > 1500) ? "Thick & Oily (Heavy encryption)" : "Thin & Watery (Lightweight keys)";
 
