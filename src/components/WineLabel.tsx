@@ -10,6 +10,9 @@ interface WineLabelProps {
     validTo: string;
     daysUntilExpiry: number;
     fingerprint: string;
+    vintageScore: number;
+    colorHex: string;
+    legs: string;
   };
 }
 
@@ -44,8 +47,31 @@ export default function WineLabel({ certDetails }: WineLabelProps) {
           <span className={styles.statsValue}>{certDetails.fingerprint}</span>
         </div>
 
+        <div className={styles.divider} />
+        
+        <div className={styles.statsRow}>
+          <span className={styles.statsLabel}>Vintage Score (Arbitrary):</span>
+          <span className={styles.statsValue}>{certDetails.vintageScore} / 100 pts</span>
+        </div>
+
+        <div className={styles.statsRow} style={{ alignItems: "center" }}>
+          <span className={styles.statsLabel}>Hue & Clarity:</span>
+          <span style={{ 
+            display: "inline-block", 
+            width: "16px", height: "16px", 
+            borderRadius: "50%", 
+            background: certDetails.colorHex,
+            border: "1px solid var(--gold-dark)"
+          }}></span>
+        </div>
+
+        <div className={styles.statsRow}>
+          <span className={styles.statsLabel}>Legs:</span>
+          <span className={styles.statsValue}>{certDetails.legs}</span>
+        </div>
+
         <div className={styles.stamp}>
-          {certDetails.daysUntilExpiry > 30 ? "Fine" : "Drink Now"}
+          {certDetails.vintageScore > 90 ? "Fine" : "Corked"}
         </div>
       </div>
     </motion.div>
