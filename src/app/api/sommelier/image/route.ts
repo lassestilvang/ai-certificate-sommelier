@@ -44,7 +44,7 @@ export async function POST(request: Request) {
     let imageBase64 = "";
     const parts = response.candidates?.[0]?.content?.parts || [];
     for (const part of parts) {
-      if (part.inlineData) {
+      if (part.inlineData && part.inlineData.data) {
         imageBase64 = part.inlineData.data;
         break;
       }
