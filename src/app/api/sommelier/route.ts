@@ -117,7 +117,7 @@ Respond ONLY with the spoken review text, no quotes or additional formatting.
           },
           body: JSON.stringify({
             text: reviewText,
-            model_id: "eleven_monolingual_v1",
+            model_id: "eleven_turbo_v2_5",
             voice_settings: {
               stability: 0.5,
               similarity_boost: 0.75
