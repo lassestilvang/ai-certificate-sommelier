@@ -19,6 +19,7 @@ export default function Home() {
 
   const [generatedImageBase64, setGeneratedImageBase64] = useState<string | null>(null);
   const [isGeneratingImage, setIsGeneratingImage] = useState<boolean>(false);
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -239,7 +240,8 @@ export default function Home() {
                 <img
                   src={`data:image/jpeg;base64,${generatedImageBase64}`}
                   alt="Generated Certificate Bottle"
-                  style={{ maxWidth: "100%", maxHeight: "500px", borderRadius: "12px", boxShadow: "0 10px 30px rgba(0,0,0,0.5)", border: `4px solid ${result.certDetails.colorHex}` }}
+                  style={{ maxWidth: "100%", maxHeight: "500px", borderRadius: "12px", boxShadow: "0 10px 30px rgba(0,0,0,0.5)", border: `4px solid ${result.certDetails.colorHex}`, cursor: "zoom-in" }}
+                  onClick={() => setIsImageModalOpen(true)}
                 />
               ) : null}
             </motion.div>
@@ -276,6 +278,32 @@ export default function Home() {
                 Spit it out
               </button>
             </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {isImageModalOpen && generatedImageBase64 && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setIsImageModalOpen(false)}
+            style={{
+              position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh",
+              backgroundColor: "rgba(0,0,0,0.85)", zIndex: 100, display: "flex",
+              alignItems: "center", justifyContent: "center", padding: "2rem",
+              cursor: "zoom-out"
+            }}
+          >
+            <motion.img 
+              initial={{ scale: 0.9 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0.9 }}
+              src={`data:image/jpeg;base64,${generatedImageBase64}`}
+              alt="Generated Certificate Bottle (Full Size)"
+              style={{ maxWidth: "100%", maxHeight: "100%", borderRadius: "8px", boxShadow: "0 20px 50px rgba(0,0,0,0.9)" }}
+            />
           </motion.div>
         )}
       </AnimatePresence>
