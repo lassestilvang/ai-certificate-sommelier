@@ -17,6 +17,8 @@ export default function Home() {
     audioBase64: string;
   } | null>(null);
 
+  const [generatedImageBase64, setGeneratedImageBase64] = useState<string | null>(null);
+  const [isGeneratingImage, setIsGeneratingImage] = useState<boolean>(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -27,6 +29,7 @@ export default function Home() {
     setStatus("loading");
     setErrorMsg("");
     setResult(null);
+    setGeneratedImageBase64(null);
 
     try {
       const res = await fetch("/api/sommelier", {
@@ -50,6 +53,20 @@ export default function Home() {
           playAudio(`data:audio/mp3;base64,${data.audioBase64}`);
         }, 1000); // slight delay to let the UI settle
       }
+
+      setIsGeneratingImage(true);
+      fetch("/api/sommelier/image", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+          domain: data.certDetails.domain,
+          vintageScore: data.certDetails.vintageScore,
+          colorHex: data.certDetails.colorHex,
+          legs: data.certDetails.legs
+        }),
+      }).then(res => res.json()).then(imgData => {
+        if (imgData.imageBase64) setGeneratedImageBase64(imgData.imageBase64);
+      }).catch(console.error).finally(() => setIsGeneratingImage(false));
     } catch (err: any) {
       console.error(err);
       setStatus("error");
@@ -154,6 +171,25 @@ export default function Home() {
             transition={{ duration: 1, delay: 0.3 }}
           >
             <WineLabel certDetails={result.certDetails} />
+
+            <motion.div 
+              style={{ marginTop: "2rem", textAlign: "center", minHeight: "300px", display: "flex", alignItems: "center", justifyContent: "center", width: "100%" }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1 }}
+            >
+              {isGeneratingImage && !generatedImageBase64 ? (
+                <div style={{ color: "var(--wine-dark)", opacity: 0.7, fontStyle: "italic", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                  <Loader size={18} className="spin" /> Nanobanana Pro is painting the vintage...
+                </div>
+              ) : generatedImageBase64 ? (
+                <img 
+                  src={`data:image/jpeg;base64,${generatedImageBase64}`} 
+                  alt="Generated Certificate Bottle" 
+                  style={{ maxWidth: "100%", maxHeight: "500px", borderRadius: "12px", boxShadow: "0 10px 30px rgba(0,0,0,0.5)", border: `4px solid ${result.certDetails.colorHex}` }}
+                />
+              ) : null}
+            </motion.div>
 
             <motion.div 
               style={{ 
