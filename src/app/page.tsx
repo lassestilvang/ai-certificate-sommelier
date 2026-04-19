@@ -10,7 +10,7 @@ export default function Home() {
   const [domain, setDomain] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
-  
+
   const [result, setResult] = useState<{
     certDetails: any;
     reviewText: string;
@@ -46,7 +46,7 @@ export default function Home() {
 
       setResult(data);
       setStatus("success");
-      
+
       if (data.audioBase64) {
         // Auto-play the Audio
         setTimeout(() => {
@@ -58,7 +58,7 @@ export default function Home() {
       fetch("/api/sommelier/image", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
+        body: JSON.stringify({
           domain: data.certDetails.domain,
           vintageScore: data.certDetails.vintageScore,
           colorHex: data.certDetails.colorHex,
@@ -80,10 +80,10 @@ export default function Home() {
     }
     const audio = new Audio(src);
     audioRef.current = audio;
-    
+
     audio.onended = () => setIsPlaying(false);
     audio.onplay = () => setIsPlaying(true);
-    
+
     audio.play().catch(e => console.error("Audio playback failed", e));
   };
 
@@ -101,14 +101,14 @@ export default function Home() {
   return (
     <main style={{ minHeight: "100vh", display: "flex", flexDirection: "column", padding: "2rem", alignItems: "center", position: "relative", zIndex: 10 }}>
       {/* Header section */}
-      <motion.div 
+      <motion.div
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8 }}
         style={{ textAlign: "center", marginTop: "4rem", marginBottom: "3rem" }}
       >
         <Image src="/logo.png" alt="Wine" width={80} height={80} style={{ margin: "0 auto", marginBottom: "1rem", borderRadius: "50%", boxShadow: "0 4px 15px rgba(0,0,0,0.5)", border: "2px solid var(--gold-accent)" }} priority />
-        <h1 style={{ fontSize: "3rem", marginBottom: "0.5rem" }}>Sommelier AI</h1>
+        <h1 style={{ fontSize: "3rem", marginBottom: "0.5rem" }}>AI Certificate Sommelier</h1>
         <p style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", color: "var(--wine-red)", fontSize: "1.2rem" }}>
           A fine tasting of your cryptographic appellations.
         </p>
@@ -117,15 +117,15 @@ export default function Home() {
       {/* Input section */}
       <AnimatePresence>
         {status !== "success" && (
-          <motion.div 
+          <motion.div
             style={{ width: "100%", maxWidth: "500px", margin: "0 auto" }}
             initial={{ opacity: 1 }}
             exit={{ opacity: 0, scale: 0.9, y: -20 }}
             transition={{ duration: 0.5 }}
           >
             <form onSubmit={handleAnalyze} style={{ display: "flex", flexDirection: "column", gap: "2rem", alignItems: "center" }}>
-              <input 
-                type="text" 
+              <input
+                type="text"
                 value={domain}
                 onChange={(e) => setDomain(e.target.value)}
                 placeholder="Enter a domain (e.g. google.com)"
@@ -133,9 +133,9 @@ export default function Home() {
                 disabled={status === "loading"}
                 autoComplete="off"
               />
-              <button 
-                type="submit" 
-                className="button-wine" 
+              <button
+                type="submit"
+                className="button-wine"
                 disabled={status === "loading" || !domain.trim()}
                 style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
               >
@@ -150,7 +150,7 @@ export default function Home() {
             </form>
 
             {status === "error" && (
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }}
                 style={{ color: "var(--wine-red)", marginTop: "2rem", textAlign: "center", fontFamily: "var(--font-mono)" }}
               >
@@ -164,7 +164,7 @@ export default function Home() {
       {/* Results Section */}
       <AnimatePresence>
         {status === "success" && result && (
-          <motion.div 
+          <motion.div
             style={{ width: "100%", maxWidth: "800px", margin: "0 auto" }}
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
@@ -172,7 +172,7 @@ export default function Home() {
           >
             <WineLabel certDetails={result.certDetails} />
 
-            <motion.div 
+            <motion.div
               style={{ marginTop: "2rem", textAlign: "center", minHeight: "300px", display: "flex", alignItems: "center", justifyContent: "center", width: "100%" }}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -183,18 +183,18 @@ export default function Home() {
                   <Loader size={18} className="spin" /> Nanobanana Pro is painting the vintage...
                 </div>
               ) : generatedImageBase64 ? (
-                <img 
-                  src={`data:image/jpeg;base64,${generatedImageBase64}`} 
-                  alt="Generated Certificate Bottle" 
+                <img
+                  src={`data:image/jpeg;base64,${generatedImageBase64}`}
+                  alt="Generated Certificate Bottle"
                   style={{ maxWidth: "100%", maxHeight: "500px", borderRadius: "12px", boxShadow: "0 10px 30px rgba(0,0,0,0.5)", border: `4px solid ${result.certDetails.colorHex}` }}
                 />
               ) : null}
             </motion.div>
 
-            <motion.div 
-              style={{ 
-                marginTop: "3rem", 
-                padding: "2rem", 
+            <motion.div
+              style={{
+                marginTop: "3rem",
+                padding: "2rem",
                 borderTop: "1px solid var(--gold-dark)",
                 borderBottom: "1px solid var(--gold-dark)",
                 textAlign: "center"
@@ -204,9 +204,9 @@ export default function Home() {
               transition={{ delay: 1, duration: 1.5 }}
             >
               <h3 style={{ fontFamily: "var(--font-sans)", textTransform: "uppercase", letterSpacing: "0.2em", fontSize: "0.8rem", marginBottom: "1rem", opacity: 0.6 }}>The Review</h3>
-              <p style={{ 
-                fontFamily: "var(--font-serif)", 
-                fontSize: "1.5rem", 
+              <p style={{
+                fontFamily: "var(--font-serif)",
+                fontSize: "1.5rem",
                 lineHeight: "1.6",
                 color: "var(--ink-color)",
                 maxWidth: "600px",
@@ -217,11 +217,11 @@ export default function Home() {
 
               {result.audioBase64 && (
                 <div style={{ marginTop: "2rem", display: "flex", justifyContent: "center" }}>
-                  <button 
+                  <button
                     onClick={togglePlayback}
-                    style={{ 
-                      background: "transparent", 
-                      border: "1px solid var(--wine-dark)", 
+                    style={{
+                      background: "transparent",
+                      border: "1px solid var(--wine-dark)",
                       borderRadius: "50%",
                       width: "50px", height: "50px",
                       display: "flex", alignItems: "center", justifyContent: "center",
@@ -245,7 +245,7 @@ export default function Home() {
             </motion.div>
 
             <div style={{ textAlign: "center", marginTop: "3rem", display: "flex", gap: "1rem", justifyContent: "center" }}>
-              <button 
+              <button
                 onClick={() => {
                   setStatus("idle");
                   setDomain("");
@@ -260,7 +260,7 @@ export default function Home() {
                 Taste Another Vintage
               </button>
 
-              <button 
+              <button
                 onClick={() => {
                   if (audioRef.current) {
                     audioRef.current.pause();
