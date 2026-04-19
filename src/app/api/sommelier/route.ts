@@ -15,11 +15,11 @@ async function getCertificate(domain: string): Promise<any> {
     // Strip http/https and paths if user blindly pasted a URL
     let hostname = domain;
     try {
-        if (domain.startsWith("http")) {
-            const url = new URL(domain);
-            hostname = url.hostname;
-        }
-    } catch(e) {}
+      if (domain.startsWith("http")) {
+        const url = new URL(domain);
+        hostname = url.hostname;
+      }
+    } catch (e) { }
 
     const socket = tls.connect(
       {
@@ -42,7 +42,7 @@ async function getCertificate(domain: string): Promise<any> {
     socket.on("error", (err) => {
       reject(err);
     });
-    
+
     // Timeout after 8 seconds
     socket.setTimeout(8000, () => {
       socket.destroy();
@@ -61,16 +61,16 @@ export async function POST(request: Request) {
 
     // 1. Fetch TLS Certificate
     const cert = await getCertificate(domain);
-    
+
     const validFrom = new Date(cert.valid_from).toISOString().split('T')[0];
     const validTo = new Date(cert.valid_to).toISOString().split('T')[0];
     const issuer = cert.issuer?.O || cert.issuer?.CN || "Unknown Vineyards";
     const subject = cert.subject?.CN || domain;
-    
+
     // Days until expiration
     const expiryTime = new Date(cert.valid_to).getTime();
     const daysUntilExpiry = Math.ceil((expiryTime - Date.now()) / (1000 * 60 * 60 * 24));
-    
+
     const certDetailsStr = `
 Domain: ${subject}
 Issuer (Vineyard): ${issuer}
@@ -82,7 +82,7 @@ Expires in: ${daysUntilExpiry} days
 
     // 2. Generate Sommelier Review using Gemini
     const ai = new GoogleGenAI({});
-    
+
     const prompt = `
 You are an absurdly elitist, sophisticated, and somewhat dramatic wine sommelier. 
 However, you do not review wine. You review SSL/TLS certificates for websites.
@@ -99,7 +99,7 @@ Respond ONLY with the spoken review text, no quotes or additional formatting.
 `;
 
     const geminiResponse = await ai.models.generateContent({
-      model: "gemini-3-pro-preview", // High capability model
+      model: "gemini-3-flash-preview", // High capability model
       contents: prompt,
     });
 
@@ -152,7 +152,7 @@ Respond ONLY with the spoken review text, no quotes or additional formatting.
   } catch (error: any) {
     console.error("Sommelier error:", error);
     return NextResponse.json(
-      { error: error.message || "Failed to analyze certificate" }, 
+      { error: error.message || "Failed to analyze certificate" },
       { status: 500 }
     );
   }
