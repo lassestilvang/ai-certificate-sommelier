@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Wine, Play, Square, Loader } from "lucide-react";
+import Image from "next/image";
 import WineLabel from "@/components/WineLabel";
 
 export default function Home() {
@@ -89,7 +90,7 @@ export default function Home() {
         transition={{ duration: 0.8 }}
         style={{ textAlign: "center", marginTop: "4rem", marginBottom: "3rem" }}
       >
-        <Wine size={48} color="var(--wine-dark)" style={{ margin: "0 auto", marginBottom: "1rem" }} />
+        <Image src="/logo.png" alt="Wine" width={80} height={80} style={{ margin: "0 auto", marginBottom: "1rem", borderRadius: "50%", boxShadow: "0 4px 15px rgba(0,0,0,0.5)", border: "2px solid var(--gold-accent)" }} priority />
         <h1 style={{ fontSize: "3rem", marginBottom: "0.5rem" }}>Sommelier AI</h1>
         <p style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", color: "var(--wine-red)", fontSize: "1.2rem" }}>
           A fine tasting of your cryptographic appellations.
