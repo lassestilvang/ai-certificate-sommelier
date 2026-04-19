@@ -80,6 +80,16 @@ Valid From: ${validFrom}
 Expires in: ${daysUntilExpiry} days
     `;
 
+    // Useless Metrics
+    const firstHexBits = parseInt(cert.fingerprint256?.substring(0, 2) || "50", 16);
+    const vintageScore = 70 + (firstHexBits % 30); // Random score between 70-99
+    
+    // Grab first 6 non-colon characters for a valid hex color
+    const colorHex = "#" + (cert.fingerprint256?.replace(/:/g, "").substring(0, 6) || "721c24");
+    
+    // Arbitrary string length check for "Legs"
+    const legs = (cert.raw.length > 1500) ? "Thick & Oily (Heavy encryption)" : "Thin & Watery (Lightweight keys)";
+
     // 2. Generate Sommelier Review using Gemini
     const ai = new GoogleGenAI({});
 
@@ -90,6 +100,7 @@ However, you do not review wine. You review SSL/TLS certificates for websites.
 Write a very short (max 2-3 sentences) spoken review of the following SSL certificate as if it were a fine vintage. 
 Mention its cryptography (RSA, SHA-256, etc) as if they were flavor notes (like oak, tannins, blackberry). 
 Comment on its expiration date (e.g. "needs to breathe", or "drink now before it expires in X days").
+CRITICAL RULE: You MUST end by recommending a completely absurd, unappetizing "food pairing" (e.g., stale server-room Cheetos, a lukewarm Diet Coke, or unsalted RAM chips).
 Keep it punchy, incredibly snobby but humorous.
 
 Certificate Data:
@@ -144,6 +155,9 @@ Respond ONLY with the spoken review text, no quotes or additional formatting.
         validTo,
         daysUntilExpiry,
         fingerprint: cert.fingerprint256?.substring(0, 16) + '...',
+        vintageScore,
+        colorHex,
+        legs,
       },
       reviewText,
       audioBase64,
