@@ -9,7 +9,7 @@ export const maxDuration = 60; // 60 seconds max
 // ElevenLabs Voice ID for "Deep Male Wine Connoisseur" (George - snobby british / deep)
 // Alternatively, "pNInz6obpgDQGcFmaJgB" for Adam
 // const VOICE_ID = "pNInz6obpgDQGcFmaJgB";
-const VOICE_ID = "zwqMXWHsKBMIb9RPiWI0";
+const VOICE_ID = "nPczCjzI2devNBz1zQrb";
 
 async function getCertificate(domain: string): Promise<any> {
   return new Promise((resolve, reject) => {
