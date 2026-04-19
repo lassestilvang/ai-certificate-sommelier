@@ -6,6 +6,15 @@ import { Wine, Play, Square, Loader } from "lucide-react";
 import Image from "next/image";
 import WineLabel from "@/components/WineLabel";
 
+const LOADING_MESSAGES = [
+  "Swirling TCP packets...",
+  "Smelling the cipher handshake...",
+  "Letting the RSA keys breathe...",
+  "Decanting the SSL fingerprint...",
+  "Rejecting invalid signatures...",
+  "Checking the cork for malware..."
+];
+
 export default function Home() {
   const [domain, setDomain] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
@@ -22,6 +31,18 @@ export default function Home() {
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [loadingMsgIdx, setLoadingMsgIdx] = useState(0);
+
+  useEffect(() => {
+    let interval: ReturnType<typeof setInterval>;
+    if (status === "loading") {
+      setLoadingMsgIdx(0);
+      interval = setInterval(() => {
+        setLoadingMsgIdx(prev => (prev + 1) % LOADING_MESSAGES.length);
+      }, 2500);
+    }
+    return () => clearInterval(interval);
+  }, [status]);
 
   const handleAnalyze = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -142,7 +163,7 @@ export default function Home() {
               >
                 {status === "loading" ? (
                   <>
-                    <Loader size={20} className="spin" /> Decoding Tannins...
+                    <Loader size={20} className="spin" /> {LOADING_MESSAGES[loadingMsgIdx]}
                   </>
                 ) : (
                   "Taste Certificate"
