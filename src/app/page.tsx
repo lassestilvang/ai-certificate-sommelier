@@ -208,7 +208,7 @@ export default function Home() {
               )}
             </motion.div>
 
-            <div style={{ textAlign: "center", marginTop: "3rem" }}>
+            <div style={{ textAlign: "center", marginTop: "3rem", display: "flex", gap: "1rem", justifyContent: "center" }}>
               <button 
                 onClick={() => {
                   setStatus("idle");
@@ -222,6 +222,22 @@ export default function Home() {
                 style={{ fontSize: "0.9rem", padding: "8px 16px" }}
               >
                 Taste Another Vintage
+              </button>
+
+              <button 
+                onClick={() => {
+                  if (audioRef.current) {
+                    audioRef.current.pause();
+                    setIsPlaying(false);
+                  }
+                  alert("Absolutely corked. You violently spit out the certificate tasting.");
+                  setStatus("idle");
+                  setDomain("");
+                }}
+                className="button-wine"
+                style={{ fontSize: "0.9rem", padding: "8px 16px", background: "transparent", color: "var(--wine-dark)" }}
+              >
+                Spit it out
               </button>
             </div>
           </motion.div>
