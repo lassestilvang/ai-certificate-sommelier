@@ -173,25 +173,6 @@ export default function Home() {
             <WineLabel certDetails={result.certDetails} />
 
             <motion.div
-              style={{ marginTop: "2rem", textAlign: "center", minHeight: "300px", display: "flex", alignItems: "center", justifyContent: "center", width: "100%" }}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 1 }}
-            >
-              {isGeneratingImage && !generatedImageBase64 ? (
-                <div style={{ color: "var(--wine-dark)", opacity: 0.7, fontStyle: "italic", display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                  <Loader size={18} className="spin" /> Nanobanana Pro is painting the vintage...
-                </div>
-              ) : generatedImageBase64 ? (
-                <img
-                  src={`data:image/jpeg;base64,${generatedImageBase64}`}
-                  alt="Generated Certificate Bottle"
-                  style={{ maxWidth: "100%", maxHeight: "500px", borderRadius: "12px", boxShadow: "0 10px 30px rgba(0,0,0,0.5)", border: `4px solid ${result.certDetails.colorHex}` }}
-                />
-              ) : null}
-            </motion.div>
-
-            <motion.div
               style={{
                 marginTop: "3rem",
                 padding: "2rem",
@@ -242,6 +223,25 @@ export default function Home() {
                   </button>
                 </div>
               )}
+            </motion.div>
+
+            <motion.div
+              style={{ marginTop: "2rem", textAlign: "center", minHeight: "300px", display: "flex", alignItems: "center", justifyContent: "center", width: "100%" }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1 }}
+            >
+              {isGeneratingImage && !generatedImageBase64 ? (
+                <div style={{ color: "var(--wine-dark)", opacity: 0.7, fontStyle: "italic", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                  <Loader size={18} className="spin" /> Nanobanana Pro is painting the vintage...
+                </div>
+              ) : generatedImageBase64 ? (
+                <img
+                  src={`data:image/jpeg;base64,${generatedImageBase64}`}
+                  alt="Generated Certificate Bottle"
+                  style={{ maxWidth: "100%", maxHeight: "500px", borderRadius: "12px", boxShadow: "0 10px 30px rgba(0,0,0,0.5)", border: `4px solid ${result.certDetails.colorHex}` }}
+                />
+              ) : null}
             </motion.div>
 
             <div style={{ textAlign: "center", marginTop: "3rem", display: "flex", gap: "1rem", justifyContent: "center" }}>
