@@ -99,7 +99,7 @@ Respond ONLY with the spoken review text, no quotes or additional formatting.
 `;
 
     const geminiResponse = await ai.models.generateContent({
-      model: "gemini-3.1-pro", // High capability model
+      model: "gemini-3-pro-preview", // High capability model
       contents: prompt,
     });
 
